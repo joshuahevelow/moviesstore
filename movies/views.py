@@ -29,11 +29,11 @@ def show(request, id):
         average_rating = 0
         has_rating = False
 
-    user_ratings = ratings.filter(user=request.user)
-    if len(user_ratings) == 0:
-        user_rating = None
-    else:
-        user_rating = user_ratings[0]
+    user_rating = None
+    if request.user.is_authenticated:
+        user_ratings = ratings.filter(user=request.user)
+        if len(user_ratings) > 0:
+            user_rating = user_ratings[0]
     
     template_data = {}
     template_data['title'] = movie.name
