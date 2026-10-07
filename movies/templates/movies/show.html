@@ -86,6 +86,40 @@
       </div>
       <div class="col-md-6 mx-auto mb-3 text-center">
         <img src="{{ template_data.movie.image.url }}" class="rounded img-card-400" />
+        {% if user.is_authenticated %}
+        <div class="container mt-4">
+          <div class="row justify-content-center">
+            <div class="col-12">
+              <div class="card shadow p-3 mb-4 rounded">
+                <div class="card-body">
+                  {% if template_data.has_rating %}
+                  <b class="text-start">Average Rating: {{ template_data.average_rating|floatformat }} / 5</b>
+                  {% else %}
+                  <b class="text-start">Average Rating: No ratings yet</b>
+                  {% endif %}
+                  <br /> <br />
+                  {% if template_data.user_rating %}
+                  <p>Your Rating: {{ template_data.user_rating.rating }}</p>
+                  {% else %}
+                  <form method="POST" action="{% url 'movies.rate' movie_id=template_data.movie.id %}">
+                    {% csrf_token %}
+                    <div class="d-flex">
+                      <label class="w-50" for="rating">Submit a Rating:</label>
+                      <input type="number" name="rating" required class="form-control" id="rating" min="1" max="5">
+                      <div class="text-center 20 w-50">
+                      <button type="submit" class="btn bg-dark text-white">
+                        Submit Rating
+                      </button>
+                    </div>
+                  </div>
+                  {% endif %}
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>
