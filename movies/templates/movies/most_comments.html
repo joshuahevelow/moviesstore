@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-3">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col mx-auto mb-3">
+        <h2>Most Comments</h2>
+        <hr />
+        <div class="card mb-4">
+          <div class="card-header">
+            Top Commenter
+          </div>
+          <div class="card-body">
+            <b>Highest Commenter:</b> {{ temp_data.top.username }}<br />
+            <b>Highest Commenter's Number of Comments:</b> {{ temp_data.top.count }}<br />
+            <table class="table table-bordered table-striped text-center mt-3">
+              <thead>
+                <tr>
+                  <th scope="col">User</th>
+                  <th scope="col">Comments</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for u in temp_data.counts %}
+                <tr>
+                  <td>{{ u.username }}</td>
+                  <td>
+                    {{u.count}}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Most Comments</title>
+</head>
+<body>
+<h2> Most Comments</h2>
+<p><b>{{temp_data.top.username}}</b> is the highest commenter with these many comments: {{temp_data.top.count}}</p>
+<a href="{% url 'movies.index' %}"> Back to the store</a>
+</body>
+</html>
+
+

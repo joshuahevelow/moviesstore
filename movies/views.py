@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Movie, Review, Rating
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.contrib.admin.views.decorators import staff_member_required
 
 def index(request):
     search_term = request.GET.get('search')
@@ -100,3 +102,17 @@ def rate(request, movie_id):
         rating.save()
 
     return redirect('movies.show', id=movie_id)
+def most_comments(request):
+    users= User.objects.all()
+    counts=[]
+    top = None
+    for x in users:
+        num = Review.objects.filter(user=x).count()
+        counts.append({'username': x.username, 'count': num})
+        if top is None or num>top['count']:
+            top = {'username': x.username, 'count': num}
+    temp_data = {}
+    temp_data['title'] = 'Most Comments'
+    temp_data['top']= top
+    temp_data['counts'] = counts
+    return render(request, 'movies/most_comments.html', {'temp_data': temp_data})
