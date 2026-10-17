@@ -3,6 +3,7 @@ from .models import Movie, Review, Rating
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
+from cart.models import Order
 
 def index(request):
     search_term = request.GET.get('search')
@@ -102,6 +103,7 @@ def rate(request, movie_id):
         rating.save()
 
     return redirect('movies.show', id=movie_id)
+
 def most_comments(request):
     users= User.objects.all()
     counts=[]
@@ -116,3 +118,22 @@ def most_comments(request):
     temp_data['top']= top
     temp_data['counts'] = counts
     return render(request, 'movies/most_comments.html', {'temp_data': temp_data})
+
+@staff_member_required
+def most_purchases(request, count = None):
+    if count is None and request.GET.get('count', '').isdigit():
+        count = int(request.GET['count'])
+    users = User.objects.all()
+    counts=[]
+    for u in users:
+        if u:
+            num = Order.objects.filter(user=u).count()
+            counts.append({'username': u.username, 'purchases': num})
+    temp_data = {}
+    temp_data['title'] = 'Users with Most Purchases'
+    counts.sort(key=lambda x: x['purchases'], reverse=True)
+    if count is not None:
+        counts = counts[:count]
+    temp_data['purchases'] = counts
+    return render(request, 'movies/most_purchases.html', {'temp_data': temp_data})
+

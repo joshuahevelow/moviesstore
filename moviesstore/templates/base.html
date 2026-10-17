@@ -32,6 +32,9 @@
             {% if user.is_staff %}
             <a class="nav-link" href="{% url 'movies.most_comments' %}" > Most Comments </a>
             {% endif%}
+            {% if user.is_staff %}
+            <a class="nav-link" href="{% url 'movies.most_purchases' %}" > Most Purchases </a>
+            {% endif%}
             <a class="nav-link" href="{% url 'accounts.orders' %}">
                 Orders
             </a>

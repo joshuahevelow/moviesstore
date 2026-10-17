@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
+<form method="get" style="max-width: 200px; margin: 0 auto;">
+    <h4>Number of Users</h4>
+    <input type="number" name="count" min="1" placeholder="Top N">
+    <button type="submit">Show</button>
+</form>
+<div class="p-3">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col mx-auto mb-3">
+        <h2>Most Purchases</h2>
+        <hr />
+        <div class="card mb-4">
+          <div class="card-body">
+            <table class="table table-bordered table-striped text-center mt-3">
+              <thead>
+                <tr>
+                  <th scope="col">User</th>
+                  <th scope="col">Purchases</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for u in temp_data.purchases %}
+                <tr>
+                  <td>{{ u.username }}</td>
+                  <td>
+                    {{u.purchases}}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+
