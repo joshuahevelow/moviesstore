@@ -3,7 +3,7 @@ from .models import Movie, Review, Rating
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
-from cart.models import Order
+from cart.models import Order, Item
 
 def index(request):
     search_term = request.GET.get('search')
@@ -136,4 +136,24 @@ def most_purchases(request, count = None):
         counts = counts[:count]
     temp_data['purchases'] = counts
     return render(request, 'movies/most_purchases.html', {'temp_data': temp_data})
+
+@staff_member_required
+def movie_info(request):
+    movies = Movie.objects.all()
+    purchased_movies = []
+    reviewed_movies = []
+
+    for movie in movies:
+        purchase_freq = Item.objects.filter(movie=movie).count()
+        review_freq = Review.objects.filter(movie=movie).count()
+        purchased_movies.append({"movie_name" : movie.name, "purchase_freq" : purchase_freq})
+        reviewed_movies.append({"movie_name" : movie.name, "review_freq" : review_freq})
+
+    results = {}
+    results["title"] = "Most Purchased and Most Reviewed Movies"
+    results["most_purchased"] = max(purchased_movies, key=lambda x : x["purchase_freq"])
+    results["most_reviewed"] = max(reviewed_movies, key=lambda x : x["review_freq"])
+
+    return render(request, 'movies/movie_statistics.html', {'results' : results})
+    
 
