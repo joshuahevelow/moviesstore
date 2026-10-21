@@ -3,7 +3,9 @@ from django.contrib.auth import login as auth_login, authenticate, logout as aut
 from .forms import CustomUserCreationForm, CustomErrorList
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
+from django.db.models import Sum
 
 @login_required
 def logout(request):
@@ -46,3 +48,8 @@ def orders(request):
     template_data['title'] = 'Orders'
     template_data['orders'] = request.user.order_set.all()
     return render(request, 'accounts/orders.html', {'template_data': template_data})
+
+@staff_member_required
+def admin_dashboard(request):
+    top_user = User.objects.annotate(total=Sum('order__item__quantity')).order_by('-total').first()
+    return render(request, 'accounts/admin_dashboard.html', {'top_user': top_user})
