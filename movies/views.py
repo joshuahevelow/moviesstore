@@ -127,7 +127,10 @@ def most_purchases(request, count = None):
     counts=[]
     for u in users:
         if u:
-            num = Order.objects.filter(user=u).count()
+            num = 0
+            for order in Order.objects.filter(user = u):
+                for item in Item.objects.filter(order=order):
+                    num += item.quantity
             counts.append({'username': u.username, 'purchases': num})
     temp_data = {}
     temp_data['title'] = 'Users with Most Purchases'
@@ -144,7 +147,9 @@ def movie_info(request):
     reviewed_movies = []
 
     for movie in movies:
-        purchase_freq = Item.objects.filter(movie=movie).count()
+        purchase_freq = 0
+        for item in Item.objects.filter(movie=movie):
+            purchase_freq += item.quantity
         review_freq = Review.objects.filter(movie=movie).count()
         purchased_movies.append({"movie_name" : movie.name, "purchase_freq" : purchase_freq})
         reviewed_movies.append({"movie_name" : movie.name, "review_freq" : review_freq})

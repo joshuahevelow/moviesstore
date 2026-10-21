@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container p-3">
+<h2>{{ results.title }}</h2>
+<table class="table table-bordered">
+<tr>
+    <th>Most Purchased</th>
+    <td> {{ results.most_purchased.movie_name }} </td>
+    <td> {{ results.most_purchased.purchase_freq }} times </td>
+</tr>
+
+<tr>
+    <th>Most Reviewed</th>
+    <td> {{results.most_reviewed.movie_name }} </td>
+    <td> {{ results.most_reviewed.review_freq }} times </td>
+</tr>
+
+</table>
+</div>
+
+
+{% endblock content %}
