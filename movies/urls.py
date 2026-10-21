@@ -12,4 +12,5 @@ urlpatterns = [
     path('most-comments/', views.most_comments, name='movies.most_comments'),
     path('most-purchases/', views.most_purchases, name='movies.most_purchases'),
     path('most-purchases/<int:count>/', views.most_purchases, name='movies.most_purchases'),
+    path('movie-statistics/', views.movie_info, name='movies.movie_info')
 ]
